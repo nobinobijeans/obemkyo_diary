@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>勉強時間記録</title>
+	<script>
+		var records = [];
+
+		function addRecord() {
+			var date = document.getElementById('date').value;
+			var subject = document.getElementById('subject').value;
+			var time = parseInt(document.getElementById('time').value);
+
+			var record = {
+				date: date,
+				subject: subject,
+				time: time
+			};
+
+			records.push(record);
+
+			drawChart();
+		}
+
+		function drawChart() {
+			var chart = document.getElementById('chart');
+			chart.innerHTML = '';
+
+			var subjects = ['映像', '参考書', 'その他'];
+
+			for (var i = 0; i < subjects.length; i++) {
+				var subject = subjects[i];
+				var total = 0;
+
+				for (var j = 0; j < records.length; j++) {
+					if (records[j].subject === subject) {
+						total += records[j].time;
+					}
+				}
+
+				if (total > 0) {
+					var bar = document.createElement('div');
+					bar.style.width = total + 'px';
+					bar.style.height = '20px';
+					bar.style.backgroundColor = i === 0 ? 'red' : (i === 1 ? 'green' : 'blue');
+					bar.style.marginBottom = '5px';
+					chart.appendChild(bar);
+
+					var label = document.createElement('label');
+					label.innerHTML = total + '時間 (' + subject + ')';
+					chart.appendChild(label);
+					chart.appendChild(document.createElement('br'));
+				}
+			}
+		}
+
+		function setDate() {
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1;
+			var yyyy = today.getFullYear();
+			if (dd < 10) {
+				dd = '0' + dd;
+			}
+			if (mm < 10) {
+				mm = '0' + mm;
+			}
+			today = yyyy + '-' + mm + '-' + dd;
+			document.getElementById('date').value = today;
+		}
+
+		window.onload = function() {
+			setDate();
+		}
+	</script>
+</head>
+<body>
+	<h1>勉強時間記録</h1>
+	<form>
+		<label for="date">日付：</label>
+		<input type="date" id="date">
+		<br>
+		<label for="subject">科目：</label>
+		<select id="subject">
+			<option value="映像">映像</option>
+			<option value="参考書">参考書</option>
+			<option value="その他">その他</option>
+		</select>
+		<br>
+		<label for="time">時間：</label>
+		<input type="number" id="time" min="1">
+		<button type="button" onclick="addRecord()">記録する</button>
+	</form>
+	<div id="chart"></div>
+	<div id="speech-bubble">
+  		<span id="text"></span>
+	</div>
+
+	<div id="character">
+  		<img src="path/to/your/image.png" alt="cute character">
+	</div>
+</body>
+</html>
+
